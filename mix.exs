@@ -44,7 +44,9 @@ defmodule ScamPoliceAPI.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:absinthe, "~> 1.6"},
-      {:faker, "~> 0.16", only: [:dev, :test]}
+      {:absinthe_plug, "~> 1.5"},
+      {:faker, "~> 0.16", only: [:dev, :test]},
+      {:scrivener_ecto, "~> 2.7"}
     ]
   end
 

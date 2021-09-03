@@ -5,8 +5,12 @@ defmodule ScamPoliceAPIWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", ScamPoliceAPIWeb do
+  scope "/api", Absinthe do
     pipe_through :api
+
+    forward "/graphiql", Plug.GraphiQL, schema: ScamPoliceAPIWeb.Schema
+
+    forward "/", Plug, schema: ScamPoliceAPIWeb.Schema
   end
 
   # Enables LiveDashboard only for development
