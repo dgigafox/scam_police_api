@@ -18,7 +18,8 @@ defmodule ScamPoliceAPI.Scams.Scam do
   def changeset(model, attrs \\ %{}) do
     model
     |> cast(attrs, [:link, :email])
-    |> cast_assoc(:reports)
-    |> cast_assoc(:verifications)
+    |> validate_required([:link, :email])
+    |> cast_assoc(:reports, required: true)
+    |> cast_assoc(:verifications, required: true)
   end
 end

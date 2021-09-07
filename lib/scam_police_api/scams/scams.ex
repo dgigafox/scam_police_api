@@ -18,4 +18,25 @@ defmodule ScamPoliceAPI.Scams do
     |> preload(^preload)
     |> Repo.paginate(args)
   end
+
+  def report_scam(%{link: link, email: email, description: description}) do
+    params = %{
+      link: link,
+      reports: [
+        %{
+          email: email,
+          report: description
+        }
+      ],
+      verifications: [
+        %{
+          verified_by: email
+        }
+      ]
+    }
+
+    %Scam{}
+    |> Scam.changeset(params)
+    |> Repo.insert()
+  end
 end
