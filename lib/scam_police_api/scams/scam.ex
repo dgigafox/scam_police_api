@@ -8,7 +8,6 @@ defmodule ScamPoliceAPI.Scams.Scam do
 
   schema "scams" do
     field(:link, :string)
-    field(:email, :string)
 
     has_many(:reports, Report)
     has_many(:verifications, Verification)
@@ -17,8 +16,8 @@ defmodule ScamPoliceAPI.Scams.Scam do
 
   def changeset(model, attrs \\ %{}) do
     model
-    |> cast(attrs, [:link, :email])
-    |> validate_required([:link, :email])
+    |> cast(attrs, [:link])
+    |> validate_required([:link])
     |> cast_assoc(:reports, required: true)
     |> cast_assoc(:verifications, required: true)
   end

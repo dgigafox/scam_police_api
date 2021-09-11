@@ -12,8 +12,12 @@ defmodule ScamPoliceAPI.Scams.Report do
     timestamps()
   end
 
+  @required_fields [:email, :report]
+  @optional_fields [:reporter, :scam_id]
+
   def changeset(model, attrs \\ %{}) do
     model
-    |> cast(attrs, [:reporter, :email, :report, :scam_id])
+    |> cast(attrs, @required_fields ++ @optional_fields)
+    |> validate_required(@required_fields)
   end
 end

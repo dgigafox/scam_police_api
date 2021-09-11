@@ -10,8 +10,12 @@ defmodule ScamPoliceAPI.Scams.Verification do
     timestamps()
   end
 
+  @required_fields [:verified_by]
+  @optional_fields [:scam_id]
+
   def changeset(model, attrs \\ %{}) do
     model
-    |> cast(attrs, [:verified_by, :scam_id])
+    |> cast(attrs, @required_fields ++ @optional_fields)
+    |> validate_required(@required_fields)
   end
 end

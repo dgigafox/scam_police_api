@@ -5,6 +5,8 @@ defmodule ScamPoliceAPI.Scams do
   alias ScamPoliceAPI.Scams.Scam
   alias ScamPoliceAPI.Repo
 
+  def get_scam(id), do: Repo.get(Scam, id)
+
   def list_scams() do
     Scam
     |> Repo.all()

@@ -1,5 +1,7 @@
 defmodule ScamPoliceAPIWeb.Schema.ScamsTypes do
   use Absinthe.Schema.Notation
+  import AbsintheErrorPayload.Payload
+  import_types(AbsintheErrorPayload.ValidationMessageTypes)
 
   object :scam do
     field :id, :id
@@ -27,4 +29,6 @@ defmodule ScamPoliceAPIWeb.Schema.ScamsTypes do
     field :id, :id
     field :verified_by, :string
   end
+
+  payload_object(:scam_payload, :scam)
 end
