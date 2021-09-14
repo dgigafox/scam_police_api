@@ -1,6 +1,8 @@
 defmodule ScamPoliceAPIWeb.Schema do
   use Absinthe.Schema
-  import_types(ScamPoliceAPIWeb.Schema.ScamsTypes)
+  import_types(__MODULE__.AccountsTypes)
+  import_types(__MODULE__.ScamsTypes)
+  import_types(AbsintheErrorPayload.ValidationMessageTypes)
   import AbsintheErrorPayload.Payload
 
   alias ScamPoliceAPIWeb.Resolvers
@@ -28,6 +30,16 @@ defmodule ScamPoliceAPIWeb.Schema do
       arg(:description, non_null(:string))
       arg(:email, non_null(:string))
       resolve(&Resolvers.Scams.report_scam/3)
+      middleware(&build_payload/2)
+    end
+
+    @desc "Register user"
+    field :register_user, type: :user_registration_payload do
+      arg(:email, non_null(:string))
+      arg(:password, non_null(:string))
+      arg(:password_confirmation, non_null(:string))
+      arg(:nickname, :string)
+      resolve(&Resolvers.Accounts.register_user/3)
       middleware(&build_payload/2)
     end
   end

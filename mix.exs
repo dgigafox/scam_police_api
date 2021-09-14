@@ -48,7 +48,9 @@ defmodule ScamPoliceAPI.MixProject do
       {:faker, "~> 0.16", only: [:dev, :test]},
       {:scrivener_ecto, "~> 2.7"},
       {:cors_plug, "~> 2.0"},
-      {:absinthe_error_payload, "~> 1.0"}
+      {:absinthe_error_payload, "~> 1.0"},
+      {:guardian, "~>2.0"},
+      {:bcrypt_elixir, "~> 2.0"}
     ]
   end
 

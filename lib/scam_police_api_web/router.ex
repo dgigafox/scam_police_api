@@ -6,8 +6,16 @@ defmodule ScamPoliceAPIWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :protected do
+    plug ScamPoliceAPIWeb.Pipelines.Guardian
+  end
+
+  pipeline :graphql do
+    plug ScamPoliceAPIWeb.Plugs.Context
+  end
+
   scope "/api", Absinthe do
-    pipe_through :api
+    pipe_through [:api, :protected, :graphql]
 
     forward "/graphiql", Plug.GraphiQL, schema: ScamPoliceAPIWeb.Schema
 

@@ -19,6 +19,9 @@ config :scam_police_api, ScamPoliceAPIWeb.Endpoint,
   pubsub_server: ScamPoliceAPI.PubSub,
   live_view: [signing_salt: "kaYvfl5b"]
 
+# Configures Guardian
+config :scam_police_api, ScamPoliceAPI.Guardian, issuer: "scam_police_api"
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
