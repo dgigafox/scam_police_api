@@ -6,9 +6,11 @@ defmodule ScamPoliceAPIWeb.Schema.AccountsTypes do
     field :email, :string
   end
 
-  object :user_registration do
+  object :user_credential do
+    field :user_id, :integer
+    field :email, :string
     field :token, :string
   end
 
-  payload_object(:user_registration_payload, :user_registration)
+  payload_object(:user_credential_payload, :user_credential)
 end

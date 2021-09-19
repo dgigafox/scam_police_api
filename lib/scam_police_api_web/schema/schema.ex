@@ -21,6 +21,12 @@ defmodule ScamPoliceAPIWeb.Schema do
       arg(:id, :integer)
       resolve(&Resolvers.Scams.get_scam/3)
     end
+
+    @desc "Verify if a URL is valid"
+    field :is_valid_url, :boolean do
+      arg(:link, non_null(:string))
+      resolve(&Resolvers.Scams.is_valid_url/3)
+    end
   end
 
   mutation do
@@ -34,12 +40,20 @@ defmodule ScamPoliceAPIWeb.Schema do
     end
 
     @desc "Register user"
-    field :register_user, type: :user_registration_payload do
+    field :register_user, type: :user_credential_payload do
       arg(:email, non_null(:string))
       arg(:password, non_null(:string))
       arg(:password_confirmation, non_null(:string))
       arg(:nickname, :string)
       resolve(&Resolvers.Accounts.register_user/3)
+      middleware(&build_payload/2)
+    end
+
+    @desc "Login user"
+    field :login_user, type: :user_credential_payload do
+      arg(:email, non_null(:string))
+      arg(:password, non_null(:string))
+      resolve(&Resolvers.Accounts.login_user/3)
       middleware(&build_payload/2)
     end
   end
