@@ -6,6 +6,7 @@ defmodule ScamPoliceAPIWeb.Schema do
   import AbsintheErrorPayload.Payload
 
   alias ScamPoliceAPIWeb.Resolvers
+  alias ScamPoliceAPIWeb.Middlewares.Authentication
 
   query do
     @desc "List reported scams with pagination"
@@ -35,6 +36,7 @@ defmodule ScamPoliceAPIWeb.Schema do
       arg(:link, non_null(:string))
       arg(:description, non_null(:string))
       arg(:email, non_null(:string))
+      middleware(Authentication)
       resolve(&Resolvers.Scams.report_scam/3)
       middleware(&build_payload/2)
     end

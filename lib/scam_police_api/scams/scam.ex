@@ -33,6 +33,8 @@ defmodule ScamPoliceAPI.Scams.Scam do
     end
   end
 
+  def is_valid_url(nil), do: false
+
   def is_valid_url(link) do
     uri = URI.parse(link)
 
