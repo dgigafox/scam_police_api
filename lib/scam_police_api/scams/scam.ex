@@ -9,8 +9,8 @@ defmodule ScamPoliceAPI.Scams.Scam do
   schema "scams" do
     field(:link, :string)
 
-    has_many(:reports, Report)
-    has_many(:verifications, Verification)
+    has_many(:reports, Report, preload_order: [desc: :inserted_at])
+    has_many(:verifications, Verification, preload_order: [desc: :inserted_at])
     timestamps()
   end
 

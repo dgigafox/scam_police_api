@@ -19,14 +19,13 @@ defmodule ScamPoliceAPIWeb.Schema.ScamsTypes do
 
   object :report do
     field :id, :id
-    field :email, :string
     field :report, :string
-    field :reporter, :string
+    field :reporter, :user
   end
 
   object :verification do
     field :id, :id
-    field :verified_by, :string
+    field :verified_by, :user
   end
 
   payload_object(:scam_payload, :scam)

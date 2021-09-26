@@ -3,6 +3,7 @@ defmodule ScamPoliceAPIWeb.Schema.AccountsTypes do
   import AbsintheErrorPayload.Payload
 
   object :user do
+    field :id, :integer
     field :email, :string
   end
 

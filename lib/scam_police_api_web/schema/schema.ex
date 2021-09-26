@@ -35,7 +35,6 @@ defmodule ScamPoliceAPIWeb.Schema do
     field :report_scam, type: :scam_payload do
       arg(:link, non_null(:string))
       arg(:description, non_null(:string))
-      arg(:email, non_null(:string))
       middleware(Authentication)
       resolve(&Resolvers.Scams.report_scam/3)
       middleware(&build_payload/2)

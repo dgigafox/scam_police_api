@@ -4,13 +4,12 @@ defmodule ScamPoliceAPI.Scams.Verification do
   import Ecto.Changeset
 
   schema "verifications" do
-    field(:verified_by, :string)
-
+    belongs_to(:verified_by, ScamPoliceAPI.Accounts.User)
     belongs_to(:scam, ScamPoliceAPI.Scams.Scam)
     timestamps()
   end
 
-  @required_fields [:verified_by]
+  @required_fields [:verified_by_id]
   @optional_fields [:scam_id]
 
   def changeset(model, attrs \\ %{}) do

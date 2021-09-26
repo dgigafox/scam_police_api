@@ -4,16 +4,15 @@ defmodule ScamPoliceAPI.Scams.Report do
   import Ecto.Changeset
 
   schema "reports" do
-    field(:reporter, :string)
-    field(:email, :string)
     field(:report, :string)
 
+    belongs_to(:reporter, ScamPoliceAPI.Accounts.User)
     belongs_to(:scam, ScamPoliceAPI.Scams.Scam)
     timestamps()
   end
 
-  @required_fields [:email, :report]
-  @optional_fields [:reporter, :scam_id]
+  @required_fields [:report]
+  @optional_fields [:scam_id, :reporter_id]
 
   def changeset(model, attrs \\ %{}) do
     model

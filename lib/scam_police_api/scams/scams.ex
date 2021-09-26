@@ -21,18 +21,18 @@ defmodule ScamPoliceAPI.Scams do
     |> Repo.paginate(args)
   end
 
-  def report_scam(%{link: link, email: email, description: description}) do
+  def report_scam(%{link: link, user_id: user_id, description: description}) do
     params = %{
       link: link,
       reports: [
         %{
-          email: email,
+          reporter_id: user_id,
           report: description
         }
       ],
       verifications: [
         %{
-          verified_by: email
+          verified_by_id: user_id
         }
       ]
     }

@@ -2,9 +2,13 @@ defmodule ScamPoliceAPIWeb.Resolvers.Scams do
   @moduledoc false
   alias ScamPoliceAPI.Scams
   alias ScamPoliceAPI.Scams.Scam
+  alias ScamPoliceAPI.Repo
 
   def get_scam(_parent, args, _resolution) do
-    case Scams.get_scam(args.id) do
+    args.id
+    |> Scams.get_scam()
+    |> Repo.preload([:reports, :verifications])
+    |> case do
       nil -> {:error, "scam not found"}
       scam -> {:ok, scam}
     end
@@ -14,8 +18,11 @@ defmodule ScamPoliceAPIWeb.Resolvers.Scams do
     {:ok, Scams.search_scams(args, [:reports, :verifications])}
   end
 
-  def report_scam(_parent, args, _resolution) do
-    case Scams.report_scam(args) do
+  def report_scam(_parent, args, %{context: %{current_user: user}}) do
+    args
+    |> Map.put(:user_id, user.id)
+    |> Scams.report_scam()
+    |> case do
       {:error, changeset} -> {:ok, changeset}
       result -> result
     end
