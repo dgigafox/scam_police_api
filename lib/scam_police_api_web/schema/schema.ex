@@ -1,5 +1,6 @@
 defmodule ScamPoliceAPIWeb.Schema do
   use Absinthe.Schema
+  import_types(Absinthe.Type.Custom)
   import_types(__MODULE__.AccountsTypes)
   import_types(__MODULE__.ScamsTypes)
   import_types(AbsintheErrorPayload.ValidationMessageTypes)
@@ -15,6 +16,22 @@ defmodule ScamPoliceAPIWeb.Schema do
       arg(:page_size, :integer)
       arg(:page, :integer)
       resolve(&Resolvers.Scams.search_scams/3)
+    end
+
+    @desc "List reports with pagination"
+    field :list_reports, :paginated_reports do
+      arg(:page_size, :integer)
+      arg(:page, :integer)
+      arg(:scam_id, :id)
+      resolve(&Resolvers.Scams.list_reports/3)
+    end
+
+    @desc "List verifications with pagination"
+    field :list_verifications, :paginated_reports do
+      arg(:page_size, :integer)
+      arg(:page, :integer)
+      arg(:scam_id, :id)
+      resolve(&Resolvers.Scams.list_verifications/3)
     end
 
     @desc "Get reported scam"
@@ -37,6 +54,15 @@ defmodule ScamPoliceAPIWeb.Schema do
       arg(:description, non_null(:string))
       middleware(Authentication)
       resolve(&Resolvers.Scams.report_scam/3)
+      middleware(&build_payload/2)
+    end
+
+    @desc "Create a report"
+    field :create_report, type: :report_payload do
+      arg(:report, non_null(:string))
+      arg(:scam_id, non_null(:id))
+      middleware(Authentication)
+      resolve(&Resolvers.Scams.create_report/3)
       middleware(&build_payload/2)
     end
 

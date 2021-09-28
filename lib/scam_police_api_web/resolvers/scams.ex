@@ -7,7 +7,7 @@ defmodule ScamPoliceAPIWeb.Resolvers.Scams do
   def get_scam(_parent, args, _resolution) do
     args.id
     |> Scams.get_scam()
-    |> Repo.preload([:reports, :verifications])
+    |> Repo.preload(reports: :reporter, verifications: :verified_by)
     |> case do
       nil -> {:error, "scam not found"}
       scam -> {:ok, scam}
@@ -26,6 +26,30 @@ defmodule ScamPoliceAPIWeb.Resolvers.Scams do
       {:error, changeset} -> {:ok, changeset}
       result -> result
     end
+  end
+
+  def list_reports(_parent, args, _resolution) do
+    {:ok,
+     args
+     |> Map.put(:preload, [:reporter])
+     |> Scams.list_reports()}
+  end
+
+  def create_report(_parent, args, %{context: %{current_user: user}}) do
+    args
+    |> Map.put(:reporter_id, user.id)
+    |> Scams.create_report()
+    |> case do
+      {:error, changeset} -> {:ok, changeset}
+      {:ok, report} -> {:ok, Repo.preload(report, [:reporter])}
+    end
+  end
+
+  def list_verifications(_parent, args, _resolution) do
+    {:ok,
+     args
+     |> Map.put(:preload, [:verified_by])
+     |> Scams.list_verifications()}
   end
 
   def is_valid_url(_parent, args, _resolution) do
