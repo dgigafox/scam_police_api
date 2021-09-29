@@ -27,7 +27,7 @@ defmodule ScamPoliceAPIWeb.Schema do
     end
 
     @desc "List verifications with pagination"
-    field :list_verifications, :paginated_reports do
+    field :list_verifications, :paginated_verifications do
       arg(:page_size, :integer)
       arg(:page, :integer)
       arg(:scam_id, :id)
@@ -44,6 +44,13 @@ defmodule ScamPoliceAPIWeb.Schema do
     field :is_valid_url, :boolean do
       arg(:link, non_null(:string))
       resolve(&Resolvers.Scams.is_valid_url/3)
+    end
+
+    @desc "Verify if a scam is verified by the current user"
+    field :is_scam_verified, :boolean do
+      arg(:scam_id, non_null(:id))
+      middleware(Authentication)
+      resolve(&Resolvers.Scams.is_scam_verified/3)
     end
   end
 

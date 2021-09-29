@@ -31,6 +31,7 @@ defmodule ScamPoliceAPIWeb.Resolvers.Scams do
   def list_reports(_parent, args, _resolution) do
     {:ok,
      args
+     |> Map.put(:order_by, desc: :inserted_at)
      |> Map.put(:preload, [:reporter])
      |> Scams.list_reports()}
   end
@@ -48,11 +49,19 @@ defmodule ScamPoliceAPIWeb.Resolvers.Scams do
   def list_verifications(_parent, args, _resolution) do
     {:ok,
      args
+     |> Map.put(:order_by, desc: :inserted_at)
      |> Map.put(:preload, [:verified_by])
      |> Scams.list_verifications()}
   end
 
   def is_valid_url(_parent, args, _resolution) do
     {:ok, Scam.is_valid_url(args.link)}
+  end
+
+  def is_scam_verified(_parent, args, %{context: %{current_user: user}}) do
+    case Scams.get_scam(args.scam_id) do
+      nil -> {:error, "scam not found"}
+      scam -> {:ok, Scams.is_scam_verified(scam, user)}
+    end
   end
 end

@@ -2,6 +2,7 @@ defmodule ScamPoliceAPI.Scams do
   @moduledoc false
   import Ecto.Query
 
+  alias ScamPoliceAPI.Accounts.User
   alias ScamPoliceAPI.Scams.Report
   alias ScamPoliceAPI.Scams.Scam
   alias ScamPoliceAPI.Scams.Verification
@@ -19,6 +20,7 @@ defmodule ScamPoliceAPI.Scams do
 
     Report
     |> where_scam_id(params)
+    |> maybe_order_by(params)
     |> preload(^preload)
     |> Repo.paginate(params)
   end
@@ -28,6 +30,7 @@ defmodule ScamPoliceAPI.Scams do
 
     Verification
     |> where_scam_id(params)
+    |> maybe_order_by(params)
     |> preload(^preload)
     |> Repo.paginate(params)
   end
@@ -37,6 +40,12 @@ defmodule ScamPoliceAPI.Scams do
   end
 
   defp where_scam_id(query, _), do: query
+
+  defp maybe_order_by(query, %{order_by: order_by}) do
+    order_by(query, ^order_by)
+  end
+
+  defp maybe_order_by(query, _), do: query
 
   def search_scams(args, preload) do
     term = args[:term] || ""
@@ -72,5 +81,11 @@ defmodule ScamPoliceAPI.Scams do
     %Scam{}
     |> Scam.changeset(params)
     |> Repo.insert()
+  end
+
+  def is_scam_verified(%Scam{id: scam_id}, %User{id: user_id}) do
+    Verification
+    |> where(scam_id: ^scam_id, verified_by_id: ^user_id)
+    |> Repo.exists?()
   end
 end
