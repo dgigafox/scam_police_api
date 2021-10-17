@@ -15,7 +15,7 @@ defmodule ScamPoliceAPIWeb.Resolvers.Scams do
   end
 
   def search_scams(_parent, args, _resolution) do
-    {:ok, Scams.search_scams(args, [:reports, :verifications])}
+    {:ok, Scams.search_scams(args, [[reports: :reporter], :verifications])}
   end
 
   def report_scam(_parent, args, %{context: %{current_user: user}}) do
@@ -62,6 +62,33 @@ defmodule ScamPoliceAPIWeb.Resolvers.Scams do
     case Scams.get_scam(args.scam_id) do
       nil -> {:error, "scam not found"}
       scam -> {:ok, Scams.is_scam_verified(scam, user)}
+    end
+  end
+
+  def verify_scam(_parent, args, %{context: %{current_user: user}}) do
+    with scam when not is_nil(scam) <- Scams.get_scam(args.scam_id),
+         {:ok, verification} <- Scams.verify_scam(scam, user) do
+      {:ok, verification}
+    else
+      {:error, changeset} -> {:ok, changeset}
+      nil -> {:error, "scam not found"}
+    end
+  end
+
+  def unverify_scam(_parent, args, %{context: %{current_user: user}}) do
+    with verif when not is_nil(verif) <- Scams.get_verification(args.scam_id, user.id),
+         {:ok, verification} <- Scams.unverify_scam(verif) do
+      {:ok, verification}
+    else
+      {:error, changeset} -> {:ok, changeset}
+      nil -> {:error, "verification not found"}
+    end
+  end
+
+  def count_verifications(_parent, args, _resolution) do
+    case Scams.get_scam(args.scam_id) do
+      nil -> {:error, "scam not found"}
+      scam -> {:ok, Scams.count_verifications(scam)}
     end
   end
 end

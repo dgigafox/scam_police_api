@@ -52,6 +52,12 @@ defmodule ScamPoliceAPIWeb.Schema do
       middleware(Authentication)
       resolve(&Resolvers.Scams.is_scam_verified/3)
     end
+
+    @desc "Count the number of verifications"
+    field :count_verifications, :integer do
+      arg(:scam_id, non_null(:id))
+      resolve(&Resolvers.Scams.count_verifications/3)
+    end
   end
 
   mutation do
@@ -61,6 +67,22 @@ defmodule ScamPoliceAPIWeb.Schema do
       arg(:description, non_null(:string))
       middleware(Authentication)
       resolve(&Resolvers.Scams.report_scam/3)
+      middleware(&build_payload/2)
+    end
+
+    @desc "Verifies a scam"
+    field :verify_scam, type: :verification_payload do
+      arg(:scam_id, non_null(:id))
+      middleware(Authentication)
+      resolve(&Resolvers.Scams.verify_scam/3)
+      middleware(&build_payload/2)
+    end
+
+    @desc "Unverifies a scam"
+    field :unverify_scam, type: :verification_payload do
+      arg(:scam_id, non_null(:id))
+      middleware(Authentication)
+      resolve(&Resolvers.Scams.unverify_scam/3)
       middleware(&build_payload/2)
     end
 

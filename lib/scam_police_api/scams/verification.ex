@@ -15,6 +15,7 @@ defmodule ScamPoliceAPI.Scams.Verification do
   def changeset(model, attrs \\ %{}) do
     model
     |> cast(attrs, @required_fields ++ @optional_fields)
+    |> unique_constraint([:scam_id, :verified_by_id])
     |> validate_required(@required_fields)
   end
 end

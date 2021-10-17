@@ -48,13 +48,19 @@ defmodule ScamPoliceAPI.Scams do
   defp maybe_order_by(query, _), do: query
 
   def search_scams(args, preload) do
-    term = args[:term] || ""
-
     Scam
-    |> where([s], ilike(s.link, ^"%#{term}%"))
+    |> where_term(args)
     |> preload(^preload)
+    |> order_by(desc: :inserted_at)
     |> Repo.paginate(args)
   end
+
+  defp where_term(query, %{term: term}) do
+    query
+    |> where([s], ilike(s.link, ^"%#{term}%"))
+  end
+
+  defp where_term(query, _), do: query
 
   def create_report(params) do
     %Report{}
@@ -87,5 +93,25 @@ defmodule ScamPoliceAPI.Scams do
     Verification
     |> where(scam_id: ^scam_id, verified_by_id: ^user_id)
     |> Repo.exists?()
+  end
+
+  def verify_scam(%Scam{id: scam_id}, %User{id: user_id}) do
+    %Verification{}
+    |> Verification.changeset(%{scam_id: scam_id, verified_by_id: user_id})
+    |> Repo.insert(on_conflict: :nothing)
+  end
+
+  def unverify_scam(%Verification{} = verification), do: Repo.delete(verification)
+
+  def get_verification(scam_id, user_id) do
+    Verification
+    |> where(scam_id: ^scam_id, verified_by_id: ^user_id)
+    |> Repo.one()
+  end
+
+  def count_verifications(%Scam{id: scam_id}) do
+    Verification
+    |> where(scam_id: ^scam_id)
+    |> Repo.aggregate(:count)
   end
 end

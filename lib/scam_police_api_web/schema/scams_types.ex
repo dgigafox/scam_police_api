@@ -52,4 +52,5 @@ defmodule ScamPoliceAPIWeb.Schema.ScamsTypes do
 
   payload_object(:report_payload, :report)
   payload_object(:scam_payload, :scam)
+  payload_object(:verification_payload, :verification)
 end
