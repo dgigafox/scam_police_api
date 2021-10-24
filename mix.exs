@@ -50,7 +50,8 @@ defmodule ScamPoliceAPI.MixProject do
       {:cors_plug, "~> 2.0"},
       {:absinthe_error_payload, "~> 1.0"},
       {:guardian, "~>2.0"},
-      {:bcrypt_elixir, "~> 2.0"}
+      {:bcrypt_elixir, "~> 2.0"},
+      {:distillery, "~> 2.1"}
     ]
   end
 

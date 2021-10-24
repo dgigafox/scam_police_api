@@ -52,4 +52,20 @@ config :logger, level: :info
 
 # Finally import the config/prod.secret.exs which loads secrets
 # and configuration from environment variables.
-import_config "prod.secret.exs"
+
+config :scam_police_api, ScamPoliceAPIWeb.Endpoint,
+  server: true,
+  load_from_system_env: true,
+  http: [port: {:system, "PORT"}],
+  secret_key_base: "${SECRET_KEY_BASE}",
+  url: [host: "${APP_NAME}.gigalixirapp.com", port: 443],
+  version: Mix.Project.config()[:version]
+
+config :scam_police_api, ScamPoliceAPI.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  url: "${DATABASE_URL}",
+  database: "",
+  ssl: true,
+  pool_size: 2
+
+# import_config "prod.secret.exs"
