@@ -20,7 +20,9 @@ config :scam_police_api, ScamPoliceAPIWeb.Endpoint,
   live_view: [signing_salt: "kaYvfl5b"]
 
 # Configures Guardian
-config :scam_police_api, ScamPoliceAPI.Guardian, issuer: "scam_police_api"
+config :scam_police_api, ScamPoliceAPI.Guardian,
+  issuer: "scam_police_api",
+  secret_key: "nlc5HlG7eBFoXoFR+uucI3QOTC3FjI3L934gIfiLqS7c9hIEsXmKni9ILach+141"
 
 # Configures Elixir's Logger
 config :logger, :console,

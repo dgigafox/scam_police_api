@@ -68,4 +68,6 @@ config :scam_police_api, ScamPoliceAPI.Repo,
   ssl: true,
   pool_size: 2
 
+config :scam_police_api, ScamPoliceAPI.Guardian, secret_key: "${GUARDIAN_SECRET_KEY}"
+
 # import_config "prod.secret.exs"
