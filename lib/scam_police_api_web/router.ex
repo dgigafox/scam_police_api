@@ -2,7 +2,9 @@ defmodule ScamPoliceAPIWeb.Router do
   use ScamPoliceAPIWeb, :router
 
   pipeline :api do
-    plug CORSPlug, origin: ["http://localhost:3000"]
+    plug CORSPlug,
+      origin: ["http://localhost:3000", "https://scampol.com", "https://www.scampol.com"]
+
     plug :accepts, ["json"]
   end
 
