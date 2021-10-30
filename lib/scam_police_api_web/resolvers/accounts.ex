@@ -3,10 +3,23 @@ defmodule ScamPoliceAPIWeb.Resolvers.Accounts do
   alias Ecto.Changeset
   alias ScamPoliceAPI.Accounts
   alias ScamPoliceAPI.Accounts.User
+  alias ScamPoliceAPI.GoogleJWT
   alias ScamPoliceAPI.Guardian
+  alias ScamPoliceAPI.Utils
 
   def register_user(_parent, args, _resolution) do
     with {:ok, user} <- Accounts.register_user(args),
+         {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
+      {:ok, %{token: token, user_id: user.id, email: user.email}}
+    else
+      {:error, %Changeset{} = ch} -> {:ok, ch}
+      result -> result
+    end
+  end
+
+  def login_user(_parent, %{provider: :google} = args, %{context: %{current_user: nil}}) do
+    with {:ok, %{"email" => email}} <- GoogleJWT.verify(args.token),
+         {:ok, user} <- Accounts.get_or_register_user(email, Utils.generate_random_string(64)),
          {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
       {:ok, %{token: token, user_id: user.id, email: user.email}}
     else

@@ -13,5 +13,7 @@ defmodule ScamPoliceAPIWeb.Schema.AccountsTypes do
     field :token, :string
   end
 
+  enum(:provider, values: [:google])
+
   payload_object(:user_credential_payload, :user_credential)
 end

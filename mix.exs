@@ -51,7 +51,9 @@ defmodule ScamPoliceAPI.MixProject do
       {:absinthe_error_payload, "~> 1.0"},
       {:guardian, "~>2.0"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:distillery, "~> 2.1"}
+      {:distillery, "~> 2.1"},
+      {:httpoison, "~> 1.8"},
+      {:joken, "~> 2.4"}
     ]
   end
 

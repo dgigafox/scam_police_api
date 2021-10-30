@@ -112,5 +112,13 @@ defmodule ScamPoliceAPIWeb.Schema do
       resolve(&Resolvers.Accounts.login_user/3)
       middleware(&build_payload/2)
     end
+
+    @desc "Login user using token"
+    field :token_login, type: :user_credential_payload do
+      arg(:token, non_null(:string))
+      arg(:provider, non_null(:provider))
+      resolve(&Resolvers.Accounts.login_user/3)
+      middleware(&build_payload/2)
+    end
   end
 end

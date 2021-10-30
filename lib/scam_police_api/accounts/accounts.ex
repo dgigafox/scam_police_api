@@ -15,6 +15,13 @@ defmodule ScamPoliceAPI.Accounts do
     |> Repo.insert()
   end
 
+  def get_or_register_user(email, password) do
+    case get_user_by_email(email) do
+      nil -> register_user(%{email: email, password: password})
+      user -> {:ok, user}
+    end
+  end
+
   def get_user_by_email(email) when is_binary(email) do
     Repo.get_by(User, email: email)
   end
